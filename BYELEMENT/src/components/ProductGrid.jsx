@@ -4,7 +4,7 @@ import { products } from '../data/products'
 const categories = ['Todos', ...new Set(products.map((product) => product.category))]
 const amount = (price) => Number(price.replace(/[^0-9]/g, ''))
 
-export default function ProductGrid() {
+export default function ProductGrid({ promotionFilter = 'Todos los descuentos' }) {
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('Todos')
   const [sort, setSort] = useState('default')
@@ -13,11 +13,13 @@ export default function ProductGrid() {
   const filtered = useMemo(() => {
     const matches = products.filter((product) =>
       (category === 'Todos' || product.category === category) &&
+      (!['Teclados', 'Ratones', 'Audio', 'Monitores'].includes(promotionFilter) || product.category === promotionFilter) &&
+      (promotionFilter !== 'Descuento 20% o más' || (1 - amount(product.price) / amount(product.previousPrice)) >= 0.2) &&
       `${product.name} ${product.id}`.toLocaleLowerCase('es').includes(query.toLocaleLowerCase('es').trim()),
     )
     if (sort !== 'default') matches.sort((a, b) => (amount(a.price) - amount(b.price)) * (sort === 'ascending' ? 1 : -1))
     return matches
-  }, [query, category, sort])
+  }, [query, category, sort, promotionFilter])
 
   function addProduct(product) {
     setSelection((items) => [...items, product])
@@ -47,6 +49,7 @@ export default function ProductGrid() {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
       {filtered.map((product) => <article key={product.id} className="bg-white p-space-md shadow-sm flex flex-col hover:shadow-md transition-shadow">
         <div className="relative bg-surface-container-low aspect-[4/3] overflow-hidden mb-space-md">
+          <span className="absolute top-2 left-2 z-10 bg-on-background text-primary-container px-2 py-1 text-label-caps font-label-caps">-{Math.round((1 - amount(product.price) / amount(product.previousPrice)) * 100)}% REBAJA</span>
           <img src={product.image} alt={product.name} loading="lazy" className="w-full h-full object-cover" />
         </div>
         <p className="font-label-mono text-label-mono text-secondary">SKU: {product.id}</p>
