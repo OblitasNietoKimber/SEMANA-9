@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}
+html { scroll-behavior: smooth; }
+body { background: #f8f9ff; color: #0b1c30; font-family: 'Hanken Grotesk', sans-serif; }
+#root { min-height: 100vh; }
+.material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-weight: normal; font-style: normal; line-height: 1; display: inline-block; white-space: nowrap; font-feature-settings: 'liga'; }
+a, button, input { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid #00677f; outline-offset: 3px; }
+button[aria-pressed="true"] { background: #0b1c30; color: #00d2ff; }
+@media (max-width: 767px) {
+ .px-margin { padding-left: 1rem; padding-right: 1rem; }
+ header > div:first-child > div { flex-wrap: wrap; gap: .5rem; }
+ header nav { max-width: 100%; overflow-x: auto; }
+ .text-display-hero { font-size: 40px; line-height: 48px; }
+ .text-headline-xl { font-size: 32px; line-height: 40px; }
+}
